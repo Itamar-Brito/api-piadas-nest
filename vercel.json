@@ -1,0 +1,27 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "src/main.ts",
+            "use": "@vercel/node",
+            "buildCommand": "npm run build && npx prisma migrate deploy"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "src/mais.ts",
+            "methods":[
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ]
+        }
+    ],
+    "env": {
+        "NODE_ENV": "production",
+        "DATABASE_URL": "mysql://root:9SCkTE+n3@jl<ug?@35.202.70.162:3306/piadas_db"
+    },
+    "outputDirectory": "dist"
+}

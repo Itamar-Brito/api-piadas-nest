@@ -1,0 +1,30 @@
+version: '3.7'
+services: 
+  piadas-api: 
+    build: ./  
+    volumes: 
+      - ./:/usr/src/api
+    ports: 
+      - 3000:3000 
+    networks: 
+      - piadas-network
+    command: npm run start:dev 
+
+    environment:  
+      - NODE_ENV=development
+
+  mysql:
+    image: mysql:5.7
+    networks: 
+      - piadas-network
+    ports: 
+    - "3306:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: piadas_db
+      MYSQL_USER: userroot
+      MYSQL_PASSWORD: root
+
+networks:  
+  piadas-network:
+    driver: bridge
