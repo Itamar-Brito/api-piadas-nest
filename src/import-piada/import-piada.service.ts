@@ -13,16 +13,15 @@ export class ImportPiadaService {
     async importAndShowPiadas() {
         try {
             this.importAndSavePiadas()
+            this.checkAndUpdatePiadas()
             return {
                 imported: 'success',
                 ImportedJokes: await this.prisma.piada.findMany()
             };
-        } catch (error) {
+        } catch (err) {
             return {
                 imported: 'fail to import',
-                notImportedJokes: await axios.get(
-                    'http://piada.atwebpages.com/php_action/api/get-piadas.php',
-                )
+                error: err
             }
         }
         
@@ -62,4 +61,34 @@ export class ImportPiadaService {
         });
     }
 
+
+    //ajustar
+    async checkAndUpdatePiadas() {
+        try {
+            const savedPiadas = await this.prisma.piada.findMany();
+            const { data } = await axios.get('http://piada.atwebpages.com/php_action/api/get-piadas.php');
+            const apiPiadas = this.convertToPiadaList(data);
+            
+            for (const savedPiada of savedPiadas) {
+                const apiPiada = apiPiadas.find(p => p.title === savedPiada.title);
+                if (!apiPiada) {
+                    await axios.get('http://piada.atwebpages.com/php_action/api/create-piada.php', {
+                        params: {
+                            'btn-cadastrar': true,
+                            titulo: savedPiada.title,
+                            piada: savedPiada.joke,
+                            api: true
+                        },
+                        headers: {
+                            'token': 'zJdDauhxKlsh629024971ee86'
+                        }
+                    });
+                }
+            }
+            return { updated: 'success' };
+        } catch (error) {
+            return { updated: 'fail to update' };
+        }
+    }
+    
 }
