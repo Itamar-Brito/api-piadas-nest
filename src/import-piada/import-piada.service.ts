@@ -77,10 +77,8 @@ export class ImportPiadaService {
                             'btn-cadastrar': true,
                             titulo: savedPiada.title,
                             piada: savedPiada.joke,
-                            api: true
-                        },
-                        headers: {
-                            'token': 'zJdDauhxKlsh629024971ee86'
+                            api: true,
+                            token: 'zJdDauhxKlsh629024971ee86'
                         }
                     }).then((data) => {
                         console.log(data)
