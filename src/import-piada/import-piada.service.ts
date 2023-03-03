@@ -82,6 +82,8 @@ export class ImportPiadaService {
                         headers: {
                             'token': 'zJdDauhxKlsh629024971ee86'
                         }
+                    }).then((data) => {
+                        console.log(data)
                     });
                 }
             }
